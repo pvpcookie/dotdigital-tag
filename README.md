@@ -1,87 +1,182 @@
-# Dotdigital Tracking Integration - Complete Solution
+# Dotdigital Tracking Test Page
 
-This repository contains a comprehensive Dotdigital tracking implementation with advanced event queuing, real-time console display, and interactive testing capabilities.
+A comprehensive test environment for Dotdigital tracking implementation with real-time event monitoring, advanced queuing system, and interactive testing capabilities.
 
-## 🎯 Quick Start with Node.js
+## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js installed on your system
-- A web browser for testing
+- npm (comes with Node.js)
+- A web browser with developer tools
+- Your Dotdigital profile ID and region
 
-### Local Development Server
-```bash
-# Navigate to the project directory
-cd /Users/shaunhogan/Work/tag-example
+### Local Development Setup
 
-# Start a simple HTTP server using Node.js
-npx http-server -p 8080 -c-1
+1. **Clone or navigate to the project directory**
+   ```bash
+   cd /Users/shaunhogan/Work/tag-example
+   ```
 
-# Or use Python if you prefer
-python3 -m http.server 8080
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-# Or use PHP if available
-php -S localhost:8080
-```
+3. **Start the development server**
+   ```bash
+   npm start
+   ```
 
-### Access the Test Page
-Open your browser and navigate to:
-- **Main Test Page**: [http://localhost:8080/index.html](http://localhost:8080/index.html)
-- **Live Console Demo**: Perfect for testing event queuing before/after script initialization
+4. **Add your Dotdigital script**
+   - Place your actual `dotdigital-tag.js` file in this directory
+   - The test page will automatically load it
 
-## 🧪 Interactive Testing Features
+5. **Open the test page**
+   - The development server will start and provide you with the local URL
+   - Navigate to the provided URL (typically http://localhost:8080)
 
-### 🔄 Event Queuing System
-The test page demonstrates advanced event queuing capabilities:
+## 🧪 Test Page Features
 
-1. **Pre-Script Testing**: Send events before enabling the script to see them queued
-2. **Script Toggle**: Use the switch to enable/disable the Dotdigital script
-3. **Live Processing**: Watch queued events get processed when script is enabled
-4. **Real-time Console**: See all events and system messages in the browser
-
-### 🎛️ Test Page Features
-
-#### Configuration Panel
-- **Script Toggle**: Enable/disable Dotdigital script to test queuing
+### Configuration Panel
 - **Region Selection**: Choose from Regions 1, 2, or 3
 - **Profile ID Input**: Enter your Dotdigital profile identifier
-- **Live Status**: Real-time display of script status, queue length, and ready state
+- **Initialize Button**: Start Dotdigital tracking with your credentials
+- **Control Buttons**: Clear console, reset page, test queue functionality
 
-#### Live Console Display
-- **Color-coded Messages**: Different colors for different event types
-- **Timestamped Logs**: Every event includes precise timing
-- **Queue Monitoring**: See events being queued and processed
-- **System Messages**: Track script loading and initialization
+### Real-Time Monitoring
+- **Status Indicator**: Live status of script loading and initialization
+- **Queue Monitor**: Real-time display of queued events waiting to be processed
+- **Console Output**: Color-coded logs of all tracking events and system messages
+- **Network Monitor**: Track all HTTP requests made by the Dotdigital script
 
-#### Comprehensive Event Testing
-- **Core Tracking**: Page views, custom events, form submissions
-- **E-commerce Flow**: Product browsing, cart updates, checkout, purchase completion
-- **User Identification**: Email identification, full profiles, anonymous users
-- **Signal Methods**: Product signals, checkout amounts, newsletters, coupons
-- **Custom Events**: Loyalty points, wishlist, reviews, support tickets
-5. Monitor the browser console and network tab to see tracking calls
+### Interactive Testing Sections
 
-## Prerequisites
+#### 🔍 Core Tracking
+- **Page View**: Test basic page tracking
+- **Custom Event**: Test custom event tracking  
+- **Form Submit**: Test form submission tracking
 
-- Valid Dotdigital account with Profile ID
-- Knowledge of your Dotdigital region
-- Browser with developer tools for monitoring tracking calls
+#### 👤 User & Signals
+- **Identify Email**: Test user identification
+- **Product Signal**: Test product interest signals
+- **Checkout Signal**: Test checkout amount signals
+- **Newsletter**: Test newsletter signup signals
 
-## Integration Notes
+#### 🛒 E-commerce
+- **Browse Product**: Test product view tracking
+- **Add to Cart**: Test cart addition events
+- **Checkout**: Test checkout process tracking
+- **Purchase**: Test purchase completion events
 
-The test page loads the actual Dotdigital tag script from:
-`../Resources/app/storefront/src/dotdigital-tag.js`
+#### 🎯 Advanced & Custom
+- **Loyalty Points**: Test loyalty program events
+- **Wishlist**: Test wishlist functionality
+- **Complete Journey**: Run a full customer journey test
+- **Marketing Flow**: Test marketing campaign flow
 
-This ensures you're testing with the same script that's used in production on your Shopware storefront.
+#### ⚙️ More Options
+- **Product List**: Test category/listing views
+- **Remove Cart**: Test cart removal events
+- **Coupon Signal**: Test coupon usage tracking
+- **Full Identify**: Test comprehensive user identification
+- **Anonymous**: Test anonymous user tracking
+- **Review**: Test review submission events
+- **Support**: Test support ticket events
 
-## Troubleshooting
+### Advanced Testing Features
 
-If tracking calls aren't working:
-1. Check the browser console for JavaScript errors
-2. Verify your Profile ID and region are correct
-3. Ensure the Dotdigital script loaded successfully
-4. Check the Network tab for failed requests
+#### 🔄 Event Queuing System
+The test page demonstrates the advanced queuing capabilities:
 
-For more detailed implementation help, see the main app documentation in the parent directory.
+1. **Pre-Script Testing**: Send events before initialization to see queuing in action
+2. **Queue Monitoring**: Watch events accumulate in the queue
+3. **Live Processing**: See queued events get processed when script initializes
+4. **Queue Status**: Real-time count of pending events
+
+#### 📊 Monitoring Tools
+- **Tabbed Interface**: Switch between Console and Network monitoring
+- **Color-coded Logs**: Different colors for system, test, network, and error messages
+- **Timestamped Events**: Precise timing for all events
+- **Network Tracking**: Monitor all HTTP requests and responses
+
+## 🛠️ Development Workflow
+
+### Testing Event Queuing
+1. **Load the page** (script not yet initialized)
+2. **Click "Test Queue"** to send events before initialization
+3. **Watch events queue up** in the Queue Monitor
+4. **Enter your Profile ID** and click "Initialize Dotdigital"
+5. **See queued events process** in real-time
+
+### Testing Individual Features
+1. **Expand any section** by clicking the section headers
+2. **Click test buttons** to trigger specific tracking events
+3. **Monitor the console** for real-time feedback
+4. **Check the network tab** for HTTP requests
+
+### Complete Journey Testing
+1. **Click "Complete Journey"** for an automated test sequence
+2. **Watch the step-by-step process** in the console
+3. **Monitor network requests** as each event fires
+4. **Verify proper event sequencing**
+
+## 📁 File Structure
+
+```
+tag-example/
+├── index.html          # Main test page
+├── index.css           # Styling for the test interface
+├── package.json        # Node.js dependencies (if any)
+├── README.md          # This documentation
+└── dotdigital-tag.js  # Your Dotdigital script (add this file)
+```
+
+## 🔧 Configuration
+
+### Required Files
+- **dotdigital-tag.js**: Your actual Dotdigital tracking script
+- **index.html**: The test interface (already provided)
+- **index.css**: Styling for the interface (already provided)
+
+### Environment Setup
+- **Local server required**: Due to CORS restrictions, the page must be served via HTTP
+- **Developer tools**: Use browser dev tools for additional monitoring
+- **Network monitoring**: Enable network tab to see tracking requests
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Script not loading:**
+- Ensure `dotdigital-tag.js` is in the same directory as `index.html`
+- Check browser console for file loading errors
+- Verify local server is running
+
+**Events not tracking:**
+- Check that Profile ID and Region are correctly entered
+- Verify initialization was successful (status indicator should be green)
+- Monitor network tab for failed requests
+
+**Queue not working:**
+- Events should queue automatically before initialization
+- Check console for queue-related messages
+- Verify `testQueue()` function is working
+
+**Console not showing data:**
+- Ensure JavaScript is enabled in your browser
+- Check for any JavaScript errors in browser console
+- Try refreshing the page and re-initializing
+
+### Debug Information
+The test page provides extensive debugging information:
+- **System Messages**: Script loading and initialization status
+- **Queue Status**: Real-time queue length and content
+- **Network Logs**: All HTTP requests with status codes
+- **Event Logs**: Detailed tracking event information
+
+## 📚 API Documentation
+
+For detailed information about available tracking methods, see the [API Documentation](#dotdigital-tracking-methods) section below.
 
 # Dotdigital Tracking Methods
 
