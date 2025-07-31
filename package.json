@@ -1,0 +1,29 @@
+{
+  "name": "dotdigital-test-suite",
+  "version": "1.0.0",
+  "description": "Dotdigital tracking test environment with event queuing demonstration",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -c-1",
+    "dev": "npx http-server -p 8080 -c-1 -o",
+    "serve": "npx http-server -p 8080 -c-1",
+    "test": "echo \"Open http://localhost:8080 in your browser to run tests\""
+  },
+  "keywords": [
+    "dotdigital",
+    "tracking",
+    "analytics",
+    "ecommerce",
+    "testing"
+  ],
+  "author": "Shopware Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "homepage": "http://localhost:8080"
+}

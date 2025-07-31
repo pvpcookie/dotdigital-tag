@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dotdigital Tracking Test Page</title>
+    <link rel="stylesheet" href="index.css">
+    <!-- Script will be loaded conditionally based on toggle -->
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Dotdigital Tracking Test</h1>
+            <p>Test all Dotdigital tracking methods with real data</p>
+        </div>
+        
+        <div class="setup">
+            <h2>⚙️ Configuration</h2>
+            <div class="setup-form">
+                <div class="form-group">
+                    <label for="regionId">Region ID</label>
+                    <select id="regionId">
+                        <option value="1">Region 1 (Default)</option>
+                        <option value="2">Region 2</option>
+                        <option value="3">Region 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profileId">Profile ID</label>
+                    <input type="text" id="profileId" placeholder="Enter your Dotdigital Profile ID" value="" required />
+                </div>
+                <button class="btn btn-primary" onclick="initializeDotdigitalTag()">Initialize Dotdigital</button>
+                <button class="btn btn-secondary" onclick="clearConsole()">Clear Console</button>
+                <button class="btn btn-secondary" onclick="clearNetworkLog()">Clear Network</button>
+                <button class="btn btn-info" onclick="testQueue()">Test Queue</button>
+                <button class="btn btn-warning" onclick="resetPage()">Reset Page</button>
+            </div>
+        </div>
+        
+        <div class="status">
+            <h3>
+                <span id="statusIndicator" class="status-indicator loading"></span>
+                Status: <span id="statusText">Not Initialized</span>
+            </h3>
+            <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                <span id="readyStatus">Ready: No</span> | 
+                <span id="queueStatus">Queue: 0 events</span> | 
+                <span id="scriptStatus">Script: Not loaded</span>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Left Column: Actions and Controls -->
+            <div class="left-column">
+                <div class="alert alert-info">
+                    <strong>📋 Instructions:</strong> 
+                    <ol style="margin: 10px 0 0 20px;">
+                        <li><strong>Add dotdigital-tag.js:</strong> Place your real dotdigital-tag.js file in this folder</li>
+                        <li><strong>Test Queue:</strong> Click "Test Queue" to send events BEFORE initialization</li>
+                        <li><strong>Initialize:</strong> Enter Profile ID and click "Initialize Dotdigital"</li>
+                        <li><strong>See Processing:</strong> Watch queued events get processed by real script</li>
+                        <li><strong>Test Events:</strong> Use buttons to test all tracking methods</li>
+                    </ol>
+                </div>
+            
+            <!-- Core Tracking Methods -->
+            <div class="section compact">
+                <h2 style="cursor: pointer;" onclick="toggleSection('coreTracking')">
+                    🔍 Core Tracking 
+                    <span id="coreTrackingToggle" style="font-size: 0.8em; color: #666;">(click to expand)</span>
+                </h2>
+                <div id="coreTrackingContent" style="display: none;">
+                    <div class="button-grid compact">
+                        <button class="btn btn-info compact" onclick="testPageView()">Page View</button>
+                        <button class="btn btn-info compact" onclick="testCustomEvent()">Custom Event</button>
+                        <button class="btn btn-info compact" onclick="testFormSubmit()">Form Submit</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User & Signals -->
+            <div class="section compact">
+                 <h2 style="cursor: pointer;" onclick="toggleSection('userSignals')">
+                    👤 User & Signals  
+                    <span id="userSignalsToggle" style="font-size: 0.8em; color: #666;">(click to expand)</span>
+                </h2>
+                <div id="userSignalsContent" style="display: none;">
+                    <div class="button-grid compact">
+                        <button class="btn btn-primary compact" onclick="testIdentifyEmail()">Identify Email</button>
+                        <button class="btn btn-warning compact" onclick="testProductSignal()">Product Signal</button>
+                        <button class="btn btn-warning compact" onclick="testCheckoutAmountSignal()">Checkout Signal</button>
+                        <button class="btn btn-warning compact" onclick="testNewsletterSignal()">Newsletter</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- E-commerce -->
+            <div class="section compact">
+                <h2 style="cursor: pointer;" onclick="toggleSection('ecommerce')">
+                    🛒 E-commerce 
+                    <span id="ecommerceToggle" style="font-size: 0.8em; color: #666;">(click to expand)</span>
+                </h2>
+                <div id="ecommerceContent" style="display: none;">
+                    <div class="button-grid compact">
+                        <button class="btn btn-success compact" onclick="testProductBrowse()">Browse Product</button>
+                        <button class="btn btn-success compact" onclick="testCartAdd()">Add to Cart</button>
+                        <button class="btn btn-success compact" onclick="testCheckout()">Checkout</button>
+                        <button class="btn btn-success compact" onclick="testPurchaseComplete()">Purchase</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Advanced & Custom -->
+            <div class="section compact">
+                <h2 style="cursor: pointer;" onclick="toggleSection('advanced')">
+                    🎯 Advanced & Custom 
+                    <span id="advancedToggle" style="font-size: 0.8em; color: #666;">(click to expand)</span>
+                </h2>
+                <div id="advancedContent" style="display: none;">
+                    <div class="button-grid compact">
+                        <button class="btn btn-danger compact" onclick="testLoyaltyEvent()">Loyalty Points</button>
+                        <button class="btn btn-danger compact" onclick="testWishlistEvent()">Wishlist</button>
+                        <button class="btn btn-primary compact" onclick="testCompleteJourney()">Complete Journey</button>
+                        <button class="btn btn-secondary compact" onclick="testMarketingFlow()">Marketing Flow</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- More Options -->
+            <div class="section compact">
+                <h2 style="cursor: pointer;" onclick="toggleSection('moreOptions')">
+                    ⚙️ More Options 
+                    <span id="moreOptionsToggle" style="font-size: 0.8em; color: #666;">(click to expand)</span>
+                </h2>
+                <div id="moreOptionsContent" style="display: none;">
+                    <div class="button-grid compact">
+                        <button class="btn btn-info compact" onclick="testProductList()">Product List</button>
+                        <button class="btn btn-success compact" onclick="testCartRemove()">Remove Cart</button>
+                        <button class="btn btn-warning compact" onclick="testCouponSignal()">Coupon Signal</button>
+                        <button class="btn btn-primary compact" onclick="testIdentifyFull()">Full Identify</button>
+                        <button class="btn btn-primary compact" onclick="testIdentifyAnonymous()">Anonymous</button>
+                        <button class="btn btn-danger compact" onclick="testReviewEvent()">Review</button>
+                        <button class="btn btn-danger compact" onclick="testSupportEvent()">Support</button>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+            <!-- End Left Column -->
+            
+            <!-- Right Column: Console and Queue Monitor -->
+            <div class="right-column">
+                <!-- Queue Monitor -->
+                <div class="section">
+                    <div class="queue-monitor">
+                        <h3>
+                            📊 Event Queue Monitor
+                            <span id="queueBadge" class="queue-status-badge empty">Empty</span>
+                        </h3>
+                        <div id="queueItems" class="queue-items">
+                            <div class="queue-empty">No events in queue</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab Container for Console and Network -->
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="switchTab('console')">📊 Console</button>
+                        <button class="tab-button" onclick="switchTab('network')">🌐 Network</button>
+                    </div>
+                    
+                    <!-- Console Tab -->
+                    <div id="consoleTab" class="tab-content active">
+                        <div class="section">
+                            <h2>Console Output</h2>
+                            <div id="consoleOutput" class="console-output">
+                                <div>Waiting for tracking events...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Network Tab -->
+                    <div id="networkTab" class="tab-content">
+                        <div class="section">
+                            <h2>Network Log</h2>
+                            <div id="networkLog" class="network-log">
+                                <div class="network-empty">No network requests detected...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test page variables - no conflicts with dotdigital-tag.js
+        let consoleOutput = [];
+        let networkLog = [];
+        let isTestPageScriptLoaded = false;
+        
+        // Network monitoring
+        function setupNetworkMonitoring() {
+            // Intercept fetch requests
+            const originalFetch = window.fetch;
+            window.fetch = function(...args) {
+                const url = args[0];
+                const options = args[1] || {};
+                const method = options.method || 'GET';
+                
+                logNetworkRequest(method, url, 'fetch');
+                
+                return originalFetch.apply(this, args)
+                    .then(response => {
+                        logNetworkResponse(method, url, response.status, response.statusText);
+                        return response;
+                    })
+                    .catch(error => {
+                        logNetworkError(method, url, error);
+                        throw error;
+                    });
+            };
+            
+            // Intercept XMLHttpRequest
+            const originalXHROpen = XMLHttpRequest.prototype.open;
+            const originalXHRSend = XMLHttpRequest.prototype.send;
+            
+            XMLHttpRequest.prototype.open = function(method, url, ...args) {
+                this._method = method;
+                this._url = url;
+                return originalXHROpen.apply(this, [method, url, ...args]);
+            };
+            
+            XMLHttpRequest.prototype.send = function(...args) {
+                const xhr = this;
+                logNetworkRequest(xhr._method, xhr._url, 'xhr');
+                
+                xhr.addEventListener('load', function() {
+                    logNetworkResponse(xhr._method, xhr._url, xhr.status, xhr.statusText);
+                });
+                
+                xhr.addEventListener('error', function() {
+                    logNetworkError(xhr._method, xhr._url, 'Network error');
+                });
+                
+                return originalXHRSend.apply(this, args);
+            };
+        }
+        
+        function logNetworkRequest(method, url, type) {
+            const timestamp = new Date().toLocaleTimeString();
+            const item = {
+                id: Date.now() + Math.random(),
+                timestamp: timestamp,
+                method: method,
+                url: url,
+                type: type,
+                status: 'pending'
+            };
+            
+            networkLog.push(item);
+            updateNetworkDisplay();
+            
+            // Also log to console
+            logToConsole('NETWORK', [`${method} ${url} (${type})`], 'method');
+        }
+        
+        function logNetworkResponse(method, url, status, statusText) {
+            // Find the corresponding request
+            const item = networkLog.find(item => 
+                item.method === method && 
+                item.url === url && 
+                item.status === 'pending'
+            );
+            
+            if (item) {
+                item.status = status;
+                item.statusText = statusText;
+                updateNetworkDisplay();
+                
+                const statusClass = status >= 200 && status < 300 ? 'success' : 'error';
+                logToConsole('NETWORK', [`${method} ${url} - ${status} ${statusText}`], statusClass);
+            }
+        }
+        
+        function logNetworkError(method, url, error) {
+            const item = networkLog.find(item => 
+                item.method === method && 
+                item.url === url && 
+                item.status === 'pending'
+            );
+            
+            if (item) {
+                item.status = 'error';
+                item.statusText = error.toString();
+                updateNetworkDisplay();
+                
+                logToConsole('NETWORK', [`${method} ${url} - ERROR: ${error}`], 'error');
+            }
+        }
+        
+        function updateNetworkDisplay() {
+            const networkDiv = document.getElementById('networkLog');
+            
+            if (networkLog.length === 0) {
+                networkDiv.innerHTML = '<div class="network-empty">No network requests detected...</div>';
+                return;
+            }
+            
+            const networkHTML = networkLog
+                .slice(-50) // Show last 50 requests
+                .reverse() // Show most recent first
+                .map(item => {
+                    const statusClass = typeof item.status === 'number' 
+                        ? (item.status >= 200 && item.status < 300 ? 'success' : 'error')
+                        : (item.status === 'pending' ? '' : 'error');
+                    
+                    return `
+                        <div class="network-item ${item.method}">
+                            <div>
+                                <span class="network-method ${item.method}">${item.method}</span>
+                                <span class="network-url">${item.url}</span>
+                            </div>
+                            <div class="network-status ${statusClass}">
+                                [${item.timestamp}] ${item.status} ${item.statusText || ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            
+            networkDiv.innerHTML = networkHTML;
+            networkDiv.scrollTop = 0; // Scroll to top to see newest
+        }
+        
+        // Enhanced console logging
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            logToConsole('LOG', args);
+        };
+        
+        function logToConsole(type, args, extraClass = '') {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            
+            const logEntry = `<div class="${extraClass}"><span class="timestamp">[${timestamp}]</span> <span class="method">${type}:</span> <span class="data">${message}</span></div>`;
+            consoleOutput.push(logEntry);
+            updateConsoleDisplay();
+        }
+        
+        function updateConsoleDisplay() {
+            const consoleDiv = document.getElementById('consoleOutput');
+            consoleDiv.innerHTML = consoleOutput.slice(-100).join(''); // Keep last 100 messages
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        
+        function clearConsole() {
+            consoleOutput = [];
+            updateConsoleDisplay();
+            logToConsole('SYSTEM', ['Console cleared'], 'success');
+        }
+        
+        function clearNetworkLog() {
+            networkLog = [];
+            updateNetworkDisplay();
+            logToConsole('SYSTEM', ['Network log cleared'], 'success');
+        }
+        
+        function resetPage() {
+            window.location.reload();
+        }
+        
+        // Status management - use real ddg script data
+        function updateStatus() {
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const readyStatus = document.getElementById('readyStatus');
+            const queueStatus = document.getElementById('queueStatus');
+            const scriptStatus = document.getElementById('scriptStatus');
+            
+            // Check if script is ready
+            const isReady = window.ddg && window.ddg._isReady ? window.ddg._isReady() : false;
+            
+            if (!isReady) {
+                indicator.className = 'status-indicator loading';
+                statusText.textContent = 'Not Initialized';
+            } else {
+                indicator.className = 'status-indicator ready';
+                statusText.textContent = 'Ready & Tracking';
+            }
+            
+            readyStatus.textContent = `Ready: ${isReady ? 'Yes' : 'No'}`;
+            
+            // Get real queue length
+            const queueLength = window.ddg && window.ddg._getQueueLength ? window.ddg._getQueueLength() : 0;
+            queueStatus.textContent = `Queue: ${queueLength} events`;
+            
+            scriptStatus.textContent = `Script: ${isTestPageScriptLoaded ? 'Loaded' : 'Loading...'}`;
+            
+            // Update queue monitor with real data
+            updateQueueMonitor();
+        }
+        
+        function updateQueueMonitor() {
+            const queueBadge = document.getElementById('queueBadge');
+            const queueItemsContainer = document.getElementById('queueItems');
+            
+            // Get real queue from ddg._getQueue()
+            const realQueue = window.ddg && window.ddg._getQueue ? window.ddg._getQueue() : [];
+            
+            // Update badge
+            if (realQueue.length === 0) {
+                queueBadge.textContent = 'Empty';
+                queueBadge.className = 'queue-status-badge empty';
+            } else {
+                queueBadge.textContent = `${realQueue.length} Pending`;
+                queueBadge.className = 'queue-status-badge';
+            }
+            
+            // Update queue items display - show real queue items
+            if (realQueue.length === 0) {
+                queueItemsContainer.innerHTML = '<div class="queue-empty">No events in queue</div>';
+            } else {
+                const itemsHTML = realQueue
+                    .slice(-20) // Show last 20 items
+                    .map((item, index) => `
+                        <div class="queue-item pending">
+                            <div class="queue-item-method">${item.methodName || 'Unknown'}</div>
+                            <div class="queue-item-data">${JSON.stringify(item.methodArguments || {}).substring(0, 100)}${JSON.stringify(item.methodArguments || {}).length > 100 ? '...' : ''}</div>
+                        </div>
+                    `).join('');
+                queueItemsContainer.innerHTML = itemsHTML;
+            }
+            
+            // Auto-scroll to bottom
+            queueItemsContainer.scrollTop = queueItemsContainer.scrollHeight;
+        }
+        
+        // Just load the real dotdigital-tag.js - no duplicated code
+        function setupDotdigitalIntegration() {
+            loadDotdigitalScript();
+        }
+        
+        // Load the real dotdigital-tag.js script
+        function loadDotdigitalScript() {
+            if (isTestPageScriptLoaded) return;
+            
+            logToConsole('SYSTEM', ['🔄 Loading dotdigital-tag.js...'], 'method');
+            
+            const script = document.createElement('script');
+            script.src = './dotdigital-tag.js';
+            script.async = true;
+            
+            script.onload = () => {
+                isTestPageScriptLoaded = true;
+                logToConsole('SYSTEM', ['✅ dotdigital-tag.js loaded successfully!'], 'success');
+                
+                // Debug what functions are available
+                setTimeout(() => {
+                    logToConsole('DEBUG', [`Available window.initializeDotdigital: ${typeof window.initializeDotdigital}`], 'method');
+                    logToConsole('DEBUG', [`Available window.ddg: ${typeof window.ddg}`], 'method');
+                    
+                    if (window.ddg) {
+                        logToConsole('DEBUG', [`DDG methods: ${Object.keys(window.ddg).join(', ')}`], 'method');
+                    }
+                }, 100);
+                
+                // Listen for the custom event from your script
+                document.addEventListener('dotdigitalTagLoaded', () => {
+                    logToConsole('SYSTEM', ['📡 Real Dotdigital tag is ready!'], 'success');
+                    updateStatus();
+                });
+                
+                updateStatus();
+            };
+            
+            script.onerror = () => {
+                isTestPageScriptLoaded = true;
+                logToConsole('SYSTEM', ['⚠️ dotdigital-tag.js not found'], 'warning');
+                updateStatus();
+            };
+            
+            document.head.appendChild(script);
+        }
+        
+        // Test queue functionality using your real script
+        function testQueue() {
+            logToConsole('TEST', ['🔄 Testing queue functionality...'], 'method');
+            
+            // Send events - your script will handle queuing automatically
+            const testEvents = [
+                () => window.ddg.track(),
+                () => window.ddg.identify({ email: 'queue.test@example.com' }),
+                () => window.ddg.productBrowse({ 
+                    productId: 'QUEUE-001',
+                    sku: 'QUEUE-001',
+                    name: 'Queue Test Product',
+                    url: '/products/queue-test',
+                    imageUrl: '/media/products/queue-test.jpg',
+                    price: 99.99,
+                    currency: 'EUR'
+                }),
+                () => window.ddg.cartUpdate({
+                    cartId: 'QUEUE-CART-001',
+                    currency: 'EUR',
+                    subtotal: 99.99,
+                    grandTotal: 99.99,
+                    cartUrl: '/checkout/cart',
+                    products: []
+                })
+            ];
+            
+            testEvents.forEach((event, index) => {
+                setTimeout(() => {
+                    logToConsole('TEST', [`Queue test event ${index + 1}:`], 'method');
+                    event();
+                    updateStatus(); // Update queue count
+                }, index * 300);
+            });
+        }
+        
+        // Initialize Dotdigital using your real script
+        function initializeDotdigitalTag() {
+            const regionId = document.getElementById('regionId').value;
+            const profileId = document.getElementById('profileId').value.trim();
+            
+            if (!profileId) {
+                alert('Please enter a Profile ID');
+                return;
+            }
+            
+            logToConsole('SYSTEM', [`Initializing Dotdigital with Region: ${regionId}, Profile: ${profileId}...`], 'method');
+            
+            // Use the correct API from dotdigital-tag.js
+            if (window.ddg && typeof window.ddg.init === 'function') {
+                window.ddg.init(regionId, profileId);
+                logToConsole('SYSTEM', ['✅ Called ddg.init from dotdigital-tag.js'], 'success');
+                
+                // Update status after a short delay to let initialization complete
+                setTimeout(() => {
+                    updateStatus();
+                }, 500);
+            } else {
+                logToConsole('ERROR', ['❌ window.ddg.init function not found - script may not be loaded'], 'error');
+                logToConsole('DEBUG', [`Available window properties: ${Object.keys(window).filter(k => k.includes('ddg') || k.includes('initialize')).join(', ')}`], 'method');
+                
+                // Try to load script if not loaded
+                if (!isTestPageScriptLoaded) {
+                    logToConsole('SYSTEM', ['Attempting to load script first...'], 'method');
+                    loadDotdigitalScript();
+                    
+                    // Retry after script loads
+                    setTimeout(() => {
+                        if (window.ddg && window.ddg.init) {
+                            window.ddg.init(regionId, profileId);
+                            logToConsole('SYSTEM', ['✅ Initialization successful after script load'], 'success');
+                            updateStatus();
+                        }
+                    }, 1000);
+                }
+            }
+        }
+        
+        // Core Tracking Methods (enhanced with logging)
+        function testPageView() {
+            logToConsole('TEST', ['Testing page view tracking...'], 'method');
+            window.ddg.track();
+        }
+        
+        function testCustomEvent() {
+            logToConsole('TEST', ['Testing custom event...'], 'method');
+            window.ddg.track();
+        }
+        
+        function testFormSubmit() {
+            logToConsole('TEST', ['Testing form submit...'], 'method');
+            window.ddg.track();
+        }
+        
+        // Signal Methods
+        function testProductSignal() {
+            logToConsole('TEST', ['Testing product signal...'], 'method');
+            window.ddg.signal('product', 'Wireless Bluetooth Headphones - Premium Edition');
+        }
+        
+        function testCheckoutAmountSignal() {
+            logToConsole('TEST', ['Testing checkout amount signal...'], 'method');
+            window.ddg.signal('CheckOutAmount', '149.99');
+        }
+        
+        function testNewsletterSignal() {
+            logToConsole('TEST', ['Testing newsletter signal...'], 'method');
+            window.ddg.signal('newsletter_signup', 'premium');
+        }
+        
+        function testCouponSignal() {
+            logToConsole('TEST', ['Testing coupon signal...'], 'method');
+            window.ddg.signal('coupon_used', 'SAVE20PERCENT');
+        }
+        
+        // E-commerce Tracking
+        function testProductBrowse() {
+            logToConsole('TEST', ['Testing product browse...'], 'method');
+            window.ddg.productBrowse({
+                productId: 'PROD-WH-BT-001',
+                sku: 'WH-BT-001',
+                name: 'Wireless Bluetooth Headphones',
+                url: '/products/wireless-bluetooth-headphones',
+                imageUrl: '/media/products/wh-bt-001.jpg',
+                imageThumbnailUrl: '/media/products/wh-bt-001-thumb.jpg',
+                price: 149.99,
+                salePrice: 129.99,
+                currency: 'EUR',
+                priceInclTax: 179.39,
+                salePriceInclTax: 155.99,
+                status: 'in_stock',
+                stock: 50,
+                description: 'Premium wireless headphones with noise cancellation',
+                categories: [
+                    'Electronics',
+                    { categoryName: 'Audio', groupName: 'Electronics' },
+                    'Headphones'
+                ],
+                brand: 'TechBrand',
+                lang: 'en',
+                variantId: 'WH-BT-001-BLACK',
+                variants: [
+                    {
+                        id: 'WH-BT-001-BLACK',
+                        name: 'Black',
+                        image: '/media/products/wh-bt-001-black.jpg',
+                        stock: 25,
+                        url: '/products/wireless-bluetooth-headphones?color=black'
+                    },
+                    {
+                        id: 'WH-BT-001-WHITE',
+                        name: 'White',
+                        image: '/media/products/wh-bt-001-white.jpg',
+                        stock: 25,
+                        url: '/products/wireless-bluetooth-headphones?color=white'
+                    }
+                ],
+                extraData: {
+                    'rating': 4.5,
+                    'reviews': 127,
+                    'warranty': '2 years',
+                    'featured': true
+                }
+            });
+        }
+        
+        function testProductList() {
+            logToConsole('TEST', ['Testing product list...'], 'method');
+            window.ddg.productList([
+                {
+                    productId: 'PROD-WH-BT-001',
+                    sku: 'WH-BT-001',
+                    name: 'Wireless Headphones',
+                    url: '/products/wireless-bluetooth-headphones',
+                    imageUrl: '/media/products/wh-bt-001.jpg',
+                    imageThumbnailUrl: '/media/products/wh-bt-001-thumb.jpg',
+                    price: 149.99,
+                    currency: 'EUR',
+                    brand: 'TechBrand',
+                    categories: ['Electronics', 'Audio'],
+                    description: 'Premium wireless headphones',
+                    stock: 50,
+                    status: 'in_stock'
+                },
+                {
+                    productId: 'PROD-SP-BT-002',
+                    sku: 'SP-BT-002',
+                    name: 'Bluetooth Speaker',
+                    url: '/products/bluetooth-speaker',
+                    imageUrl: '/media/products/sp-bt-002.jpg',
+                    imageThumbnailUrl: '/media/products/sp-bt-002-thumb.jpg',
+                    price: 79.99,
+                    currency: 'EUR',
+                    brand: 'TechBrand',
+                    categories: ['Electronics', 'Audio'],
+                    description: 'Portable bluetooth speaker',
+                    stock: 30,
+                    status: 'in_stock'
+                }
+            ]);
+        }
+        
+        function testCartAdd() {
+            logToConsole('TEST', ['Testing cart add...'], 'method');
+            window.ddg.cartUpdate({
+                cartId: 'CART-' + Date.now(),
+                currency: 'EUR',
+                subtotal: 149.99,
+                shipping: 5.99,
+                discountAmount: 0,
+                taxAmount: 23.99,
+                grandTotal: 179.97,
+                cartUrl: '/checkout/cart',
+                lang: 'en',
+                products: [
+                    {
+                        productId: 'PROD-WH-BT-001',
+                        sku: 'WH-BT-001',
+                        name: 'Wireless Headphones',
+                        description: 'Premium wireless headphones with noise cancellation',
+                        categories: ['Electronics', 'Audio'],
+                        unitPrice: 149.99,
+                        unitPriceInclTax: 179.99,
+                        salePrice: 149.99,
+                        salePriceInclTax: 179.99,
+                        quantity: 1,
+                        totalPrice: 149.99,
+                        totalPriceInclTax: 179.99,
+                        imageUrl: '/media/products/wh-bt-001.jpg',
+                        productUrl: '/products/wireless-bluetooth-headphones',
+                        brand: 'TechBrand',
+                        variantId: 'WH-BT-001-BLACK',
+                        extraData: {
+                            'color': 'black',
+                            'warranty': '2 years'
+                        }
+                    }
+                ]
+            });
+        }
+        
+        function testCartRemove() {
+            logToConsole('TEST', ['Testing cart remove...'], 'method');
+            window.ddg.cartUpdate({
+                cartId: 'CART-' + Date.now(),
+                currency: 'EUR',
+                subtotal: 0,
+                shipping: 0,
+                discountAmount: 0,
+                taxAmount: 0,
+                grandTotal: 0,
+                cartUrl: '/checkout/cart',
+                lang: 'en',
+                products: []
+            });
+        }
+        
+        function testCheckout() {
+            logToConsole('TEST', ['Testing checkout...'], 'method');
+            window.ddg.checkout({
+                cartId: 'CART-' + Date.now(),
+                currency: 'EUR',
+                subtotal: 149.99,
+                shipping: 5.99,
+                discountAmount: 0,
+                taxAmount: 23.99,
+                grandTotal: 179.97,
+                cartUrl: '/checkout/cart',
+                lang: 'en',
+                products: [
+                    {
+                        productId: 'PROD-WH-BT-001',
+                        sku: 'WH-BT-001',
+                        name: 'Wireless Headphones',
+                        description: 'Premium wireless headphones with noise cancellation',
+                        categories: ['Electronics', 'Audio'],
+                        unitPrice: 149.99,
+                        unitPriceInclTax: 179.99,
+                        salePrice: 149.99,
+                        salePriceInclTax: 179.99,
+                        quantity: 1,
+                        totalPrice: 149.99,
+                        totalPriceInclTax: 179.99,
+                        imageUrl: '/media/products/wh-bt-001.jpg',
+                        productUrl: '/products/wireless-bluetooth-headphones',
+                        brand: 'TechBrand',
+                        variantId: 'WH-BT-001-BLACK'
+                    }
+                ]
+            });
+        }
+        
+        function testPurchaseComplete() {
+            logToConsole('TEST', ['Testing purchase complete...'], 'method');
+            window.ddg.purchaseComplete({
+                orderId: 'ORD-TEST-' + Date.now(),
+                cartId: 'CART-' + Date.now(),
+                currency: 'EUR',
+                subtotal: 149.99,
+                shipping: 5.99,
+                discountAmount: 10.00,
+                taxAmount: 23.99,
+                grandTotal: 169.97,
+                cartUrl: '/checkout/cart',
+                lang: 'en',
+                products: [
+                    {
+                        productId: 'PROD-WH-BT-001',
+                        sku: 'WH-BT-001',
+                        name: 'Wireless Headphones',
+                        description: 'Premium wireless headphones with noise cancellation',
+                        categories: ['Electronics', 'Audio'],
+                        unitPrice: 149.99,
+                        unitPriceInclTax: 179.99,
+                        salePrice: 149.99,
+                        salePriceInclTax: 179.99,
+                        quantity: 1,
+                        totalPrice: 149.99,
+                        totalPriceInclTax: 179.99,
+                        imageUrl: '/media/products/wh-bt-001.jpg',
+                        productUrl: '/products/wireless-bluetooth-headphones',
+                        brand: 'TechBrand',
+                        variantId: 'WH-BT-001-BLACK',
+                        extraData: {
+                            'customer_type': 'registered'
+                        }
+                    }
+                ]
+            });
+        }
+        
+        // User Identification
+        function testIdentifyEmail() {
+            logToConsole('TEST', ['Testing identify by email...'], 'method');
+            window.ddg.identify({
+                email: 'test.customer@example.com'
+            });
+        }
+        
+        function testIdentifyFull() {
+            logToConsole('TEST', ['Testing full identification...'], 'method');
+            window.ddg.identify({
+                email: 'john.doe@example.com',
+                firstName: 'John',
+                lastName: 'Doe',
+                customerId: 'CUST-12345',
+                phone: '+1234567890',
+                dateOfBirth: '1990-01-15',
+                gender: 'male',
+                location: {
+                    city: 'Berlin',
+                    country: 'Germany',
+                    postalCode: '10115'
+                },
+                preferences: {
+                    newsletter: true,
+                    sms: false,
+                    language: 'en'
+                },
+                customerSince: '2022-03-15',
+                totalOrders: 12,
+                totalSpent: 1299.87,
+                loyaltyTier: 'gold'
+            });
+        }
+        
+        function testIdentifyAnonymous() {
+            logToConsole('TEST', ['Testing anonymous identification...'], 'method');
+            window.ddg.identify({
+                email: 'anonymous@example.com',
+                anonymousId: 'anon-' + Date.now(),
+                sessionId: 'sess-' + Date.now(),
+                userAgent: navigator.userAgent,
+                referrer: document.referrer
+            });
+        }
+        
+        // Custom Business Events
+        function testLoyaltyEvent() {
+            logToConsole('TEST', ['Testing loyalty event...'], 'method');
+            window.ddg.signal('loyalty_points_earned', '50');
+        }
+        
+        function testWishlistEvent() {
+            logToConsole('TEST', ['Testing wishlist event...'], 'method');
+            window.ddg.signal('wishlist_add', 'WH-BT-001');
+        }
+        
+        function testReviewEvent() {
+            logToConsole('TEST', ['Testing review event...'], 'method');
+            window.ddg.signal('review_submitted', 'WH-BT-001');
+        }
+        
+        function testSupportEvent() {
+            logToConsole('TEST', ['Testing support event...'], 'method');
+            window.ddg.signal('support_ticket_created', 'shipping');
+        }
+        
+        // Complete Test Scenarios
+        function testCompleteJourney() {
+            logToConsole('TEST', ['🎬 Starting Complete Customer Journey Test...'], 'method');
+            
+            const steps = [
+                () => testPageView(),
+                () => testIdentifyEmail(),
+                () => testProductList(),
+                () => testProductBrowse(),
+                () => testCartAdd(),
+                () => testCheckout(),
+                () => testPurchaseComplete()
+            ];
+            
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    logToConsole('TEST', [`📍 Journey Step ${index + 1}:`], 'method');
+                    step();
+                }, index * 1000);
+            });
+        }
+        
+        function testMarketingFlow() {
+            logToConsole('TEST', ['📧 Starting Marketing Campaign Flow Test...'], 'method');
+            
+            const steps = [
+                () => window.ddg.track(),
+                () => window.ddg.track(),
+                () => testProductBrowse(),
+                () => testNewsletterSignal(),
+                () => testCouponSignal()
+            ];
+            
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    logToConsole('TEST', [`📧 Marketing Step ${index + 1}:`], 'method');
+                    step();
+                }, index * 800);
+            });
+        }
+        
+        // Toggle section functionality
+        function toggleSection(sectionName) {
+            const content = document.getElementById(sectionName + 'Content');
+            const toggle = document.getElementById(sectionName + 'Toggle');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggle.textContent = '(click to collapse)';
+            } else {
+                content.style.display = 'none';
+                toggle.textContent = '(click to expand)';
+            }
+        }
+        
+        // Legacy function for More Options (keeping for compatibility)
+        function toggleMoreOptions() {
+            toggleSection('moreOptions');
+        }
+        
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            if (tabName === 'console') {
+                document.getElementById('consoleTab').classList.add('active');
+                document.querySelector('[onclick="switchTab(\'console\')"]').classList.add('active');
+            } else if (tabName === 'network') {
+                document.getElementById('networkTab').classList.add('active');
+                document.querySelector('[onclick="switchTab(\'network\')"]').classList.add('active');
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setupNetworkMonitoring();
+            setupDotdigitalIntegration();
+            updateStatus();
+            logToConsole('SYSTEM', ['🎯 Dotdigital Test Page loaded'], 'success');
+            logToConsole('SYSTEM', ['💡 Your dotdigital-tag.js will handle all DDG functionality'], 'method');
+            logToConsole('SYSTEM', ['🌐 Network monitoring enabled'], 'method');
+            
+            // Update status periodically
+            setInterval(updateStatus, 2000);
+        });
+    </script>
+</body>
+</html>
