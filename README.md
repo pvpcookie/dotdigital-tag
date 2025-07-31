@@ -12,26 +12,17 @@ A comprehensive test environment for Dotdigital tracking implementation with rea
 
 ### Local Development Setup
 
-1. **Clone or navigate to the project directory**
-   ```bash
-   cd /Users/shaunhogan/Work/tag-example
-   ```
-
-2. **Install dependencies**
+1. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Start the development server**
+2. **Start the development server**
    ```bash
    npm start
    ```
 
-4. **Add your Dotdigital script**
-   - Place your actual `dotdigital-tag.js` file in this directory
-   - The test page will automatically load it
-
-5. **Open the test page**
+3. **Open the test page**
    - The development server will start and provide you with the local URL
    - Navigate to the provided URL (typically http://localhost:8080)
 
